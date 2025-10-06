@@ -3,3 +3,5 @@ dist/
 .env*
 !.env.example
 .vercel
+api/**/*.js
+api/**/*.js.map
