@@ -106,8 +106,8 @@ app.post('/v1/actions/execute', async (request, reply) => {
     }
     brand = brandResult;
 
-    const envelope = request.body as any;
-    if (!validateEnvelope(envelope)) {
+    const body = request.body as any;
+    if (!validateEnvelope(body)) {
       reply.code(422);
       return {
         ok: false,
@@ -116,9 +116,12 @@ app.post('/v1/actions/execute', async (request, reply) => {
       };
     }
 
+    // Type assertion after validation
+    const envelope = body as { action: string; mode: 'dry_run' | 'execute'; idempotencyKey: string; params: any };
+
     traceId = createTraceId();
-    action = envelope.action as string;
-    mode = envelope.mode as 'dry_run' | 'execute';
+    action = envelope.action;
+    mode = envelope.mode;
 
     let paramsValid = false;
     let paramsValidator: any;

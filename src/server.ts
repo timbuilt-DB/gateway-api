@@ -117,8 +117,8 @@ fastify.post('/v1/actions/execute', async (request, reply) => {
     brand = brandResult;
 
     // Step 4: Validate envelope schema
-    const envelope = request.body as any;
-    if (!validateEnvelope(envelope)) {
+    const body = request.body as any;
+    if (!validateEnvelope(body)) {
       reply.code(422);
       return {
         ok: false,
@@ -127,10 +127,13 @@ fastify.post('/v1/actions/execute', async (request, reply) => {
       };
     }
 
+    // Type assertion after validation
+    const envelope = body as { action: string; mode: 'dry_run' | 'execute'; idempotencyKey: string; params: any };
+
     // Step 5: Create traceId
     traceId = createTraceId();
-    action = envelope.action as string;
-    mode = envelope.mode as 'dry_run' | 'execute';
+    action = envelope.action;
+    mode = envelope.mode;
 
     // Step 6: Validate action-specific params schema
     let paramsValid = false;
