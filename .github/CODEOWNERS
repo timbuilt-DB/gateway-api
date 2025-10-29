@@ -1,0 +1,4 @@
+# Code owners for critical paths
+/.github/workflows/*  @timbuilt-DB
+/src/**               @timbuilt-DB
+/docs/**              @timbuilt-DB
